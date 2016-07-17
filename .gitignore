@@ -1,6 +1,5 @@
-core/b2db_bootstrap.inc.php
-core/cache
-core/lib/*
+core/config/b2db.yml
+cache
 files/
 .settings/
 thebuggenie/.htaccess
@@ -17,8 +16,11 @@ web.config
 .remote_password_hash
 .remote_server
 .remote_username
+.remote_token
 tmp
 thebuggenie/test.php
 *~
+modules/*/vendor
+vendor/
 /composer.phar
 .directory

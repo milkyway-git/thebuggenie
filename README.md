@@ -1,5 +1,7 @@
-THE BUG GENIE VERSION 3
-=======================
+# The Bug Genie
+
+[![Build Status](https://travis-ci.org/thebuggenie/thebuggenie.png?branch=master)](https://travis-ci.org/thebuggenie/thebuggenie) 
+[![Join the chat at https://gitter.im/thebuggenie/general](https://badges.gitter.im/thebuggenie/general.svg)](https://gitter.im/thebuggenie/general?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
 
 The Bug Genie is an enterprise-grade issue-tracking, development and project
 management system. Main features includes:
@@ -23,15 +25,14 @@ For up-to-date installation and setup notes, visit the FAQ:
 http://issues.thebuggenie.com/wiki/TheBugGenie:FAQ
 
 
-GENERAL INSTALLATION NOTES
---------------------------
+## Installation
 
-### 1: Download and install composer.json
+### 1: Download and install Composer
 
-The Bug Genie uses a dependency resolution tool called composer, which must
+The Bug Genie uses a dependency resolution tool called Composer, which must
 be downloaded and run before The Bug Genie can be installed or used.
 
-Download and install composer.json from http://getcomposer.org
+Download and install Composer from http://getcomposer.org
 
 
 ### 2: Install The Bug Genie dependencies
@@ -51,7 +52,7 @@ The installation script will start automatically and guide you through the
 installation process.
 
 
-### 3: Install via command-line (unix/linux only)
+### 4: Install via command-line (unix/linux only)
 
 You can use the included command-line client to install, if you prefer that.
 Run `./tbg_cli` from this folder.
@@ -60,9 +61,15 @@ To install:
 `./tbg_cli install`
 
 
-REPORTING ISSUES
-----------------
+## REPORTING ISSUES
 
-Thank you for downloading The Bug Genie
 If you find any issues, please report them in the issue tracker on our website:
 http://issues.thebuggenie.com
+
+
+## RUNNING PHPUNIT TESTS
+
+By executing `composer.phar install --dev` during the installation process, phpunit 4.2 will get installed. The phpunit test can be run by the following command:
+```
+vendor/bin/phpunit
+```

@@ -1,13 +1,13 @@
 * <?php echo $issue->getFormattedTitle(true); ?> *
-<?php echo __('Created by %name', array('%name' =>  $issue->getPostedBy()->getBuddyname())) . ' (' . $issue->getPostedBy()->getUsername() . ')'; ?>
+<?php echo __('Created by %name', array('%name' =>  $issue->getPostedBy()->getNameWithUsername())); ?>
 
 
 * <?php echo __('Description') . ':'; ?> *
 <?php echo tbg_parse_text($issue->getDescription()); ?>
 
 <?php if ($issue->getReproductionSteps()): ?>
-	* <?php echo __('Reproduction steps') . ':'; ?> *
-	<?php echo tbg_parse_text($issue->getReproductionSteps()); ?>
+    * <?php echo __('Reproduction steps') . ':'; ?> *
+    <?php echo tbg_parse_text($issue->getReproductionSteps()); ?>
 <?php endif; ?>
 
 <?php echo __('Show issue:') . ' ' . $module->generateURL('viewissue', array('project_key' => $issue->getProject()->getKey(), 'issue_no' => $issue->getFormattedIssueNo())); ?>

@@ -1,30 +1,27 @@
 <?php
 
-	// This code requires PHP 5.3 or newer, so if we don't have it - don't continue
-	if (PHP_VERSION_ID < 50300)
-		die('This software requires PHP 5.3.0 or newer, but you have an older version. Please upgrade.');
+    // Check that we have a sufficiently recent version of php
+    if (PHP_VERSION_ID < 50400)
+        die('This software requires PHP 5.4.0 or newer. Please upgrade to a newer version of php to use The Bug Genie.');
 
-	gc_enable();
-	date_default_timezone_set('UTC');
-	
-	if (!defined('THEBUGGENIE_PATH'))
-		throw new \Exception('You must define the THEBUGGENIE_PATH constant so we can find the files we need');
+    gc_enable();
+    date_default_timezone_set('UTC');
 
-	// Load the context class, which controls most of things
-	require THEBUGGENIE_CORE_PATH . 'classes' . DS . 'TBGContext.class.php';
-	spl_autoload_register(array('TBGContext', 'autoload'));
+    if (!defined('THEBUGGENIE_PATH'))
+        die('You must define the THEBUGGENIE_PATH constant so we can find the files we need');
 
-	TBGContext::setDebugMode(true);
-	TBGContext::setMinifyEnabled(false);
+    defined('DS') || define('DS', DIRECTORY_SEPARATOR);
 
-	TBGContext::addAutoloaderClassPath(THEBUGGENIE_CORE_PATH . 'classes' . DS);
-	TBGContext::addAutoloaderClassPath(THEBUGGENIE_CORE_PATH . 'classes' . DS . 'B2DB' . DS);
-	TBGContext::autoloadNamespace('b2db', THEBUGGENIE_CORE_PATH . 'B2DB' . DS);
+    defined('THEBUGGENIE_VENDOR_PATH') || define('THEBUGGENIE_VENDOR_PATH', THEBUGGENIE_PATH . 'vendor' . DS);
+    if (!file_exists(THEBUGGENIE_VENDOR_PATH . 'autoload.php')) {
+        include THEBUGGENIE_CORE_PATH . 'templates' . DS . 'composer.error.php';
+        die();
+    }
+    require THEBUGGENIE_VENDOR_PATH . 'autoload.php';
 
-	TBGContext::initialize();
+    defined('THEBUGGENIE_CACHE_PATH') || define('THEBUGGENIE_CACHE_PATH', THEBUGGENIE_PATH . 'cache' . DS);
+    defined('THEBUGGENIE_CONFIGURATION_PATH') || define('THEBUGGENIE_CONFIGURATION_PATH', THEBUGGENIE_CORE_PATH . 'config' . DS);
+    defined('THEBUGGENIE_INTERNAL_MODULES_PATH') || define('THEBUGGENIE_INTERNAL_MODULES_PATH', THEBUGGENIE_CORE_PATH . 'modules' . DS);
+    defined('THEBUGGENIE_MODULES_PATH') || define('THEBUGGENIE_MODULES_PATH', THEBUGGENIE_PATH . 'modules' . DS);
 
-	// Initialize all composer loaded vendor packages
-	if (! file_exists(THEBUGGENIE_CORE_PATH . 'lib' . DS . 'autoload.php')) {
-		throw new \TBGComposerException('You must initialize vendor libraries by running `composer.phar install` via cli');
-	} 
-	require THEBUGGENIE_CORE_PATH . 'lib' . DS . 'autoload.php';
+    \thebuggenie\core\framework\Context::initialize();
