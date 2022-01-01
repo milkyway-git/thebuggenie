@@ -205,7 +205,7 @@
             $filename = $this->_getFilenameForKey($key);
             $new = !file_exists($filename);
             file_put_contents($filename, serialize($value));
-            if ($new)
+            if ($new && function_exists("chmod"))
                 chmod($filename, 0666);
             $this->loaded[$key] = $value;
         }
