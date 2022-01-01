@@ -17,14 +17,14 @@
             <div class="commentbody article" id="comment_<?= $comment->getID(); ?>_body">
                 <div class="commentcontent" id="comment_<?= $comment->getID(); ?>_content">
                     <?php 
-                       if (isset($options))
-                       {
-                          echo $comment->getParsedContent($options);
-                       }
-                       else
-                       {
-                          echo $comment->getParsedContent();
-                       }
+                        if (isset($options))
+                        {
+                            echo $comment->getParsedContent($options);
+                        }
+                        else
+                        {
+                            echo $comment->getParsedContent();
+                        }
                     ?>
                 </div>
                 <?php if ((\thebuggenie\core\framework\Context::isProjectContext() && !\thebuggenie\core\framework\Context::getCurrentProject()->isArchived()) || !\thebuggenie\core\framework\Context::isProjectContext()) : ?>
