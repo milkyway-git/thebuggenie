@@ -7,5 +7,14 @@
         <?php endif; ?>
         <a href="javascript:void(0)" class="closer" onclick="TBG.Main.Helpers.Backdrop.reset()"><?= fa_image_tag('times'); ?></a>
     </div>
-    <?php include_component('main/'.$uploader.'uploader', compact('mode', 'issue', 'article')); ?>
+    <?php 
+        if (isset($article))
+        {
+            include_component('main/'.$uploader.'uploader', compact('mode', 'issue', 'article'));
+        }
+        else
+        {
+            include_component('main/'.$uploader.'uploader', compact('mode', 'issue'));
+        }
+    ?>
 </div>
