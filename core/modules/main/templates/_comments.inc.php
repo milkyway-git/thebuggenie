@@ -56,5 +56,14 @@
     <div class="initial-placeholder" <?php if ($comment_count == 0): ?>style="display: none;"<?php endif; ?>><span><?= fa_image_tag('check-circle', ['class' => 'icon'], 'far'); ?><span><?= __('Issue created'); ?></span></span></div>
 <?php endif; ?>
 <div id="comments_box">
-    <?php include_component('main/commentlist', compact('comment_count_div', 'mentionable_target_type', 'target_type', 'target_id', 'issue')); ?>
+    <?php
+      if (isset($issue))
+      {
+        include_component('main/commentlist', compact('comment_count_div', 'mentionable_target_type', 'target_type', 'target_id', 'issue')); 
+      }
+      else
+      {
+        include_component('main/commentlist', compact('comment_count_div', 'mentionable_target_type', 'target_type', 'target_id')); 
+      }
+    ?>
 </div>
