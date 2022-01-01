@@ -57,13 +57,13 @@
 <?php endif; ?>
 <div id="comments_box">
     <?php
-      if (isset($issue))
-      {
-        include_component('main/commentlist', compact('comment_count_div', 'mentionable_target_type', 'target_type', 'target_id', 'issue')); 
-      }
-      else
-      {
-        include_component('main/commentlist', compact('comment_count_div', 'mentionable_target_type', 'target_type', 'target_id')); 
-      }
+        if (isset($issue))
+        {
+            include_component('main/commentlist', compact('comment_count_div', 'mentionable_target_type', 'target_type', 'target_id', 'issue')); 
+        }
+        else
+        {
+            include_component('main/commentlist', compact('comment_count_div', 'mentionable_target_type', 'target_type', 'target_id')); 
+        }
     ?>
 </div>
