@@ -16,7 +16,16 @@
             <?php include_component('main/editcomment', ['comment' => $comment, 'mentionable_target_type' => isset($mentionable_target_type) ? $mentionable_target_type : $comment->getTargetType()]); ?>
             <div class="commentbody article" id="comment_<?= $comment->getID(); ?>_body">
                 <div class="commentcontent" id="comment_<?= $comment->getID(); ?>_content">
-                    <?= $comment->getParsedContent($options); ?>
+                    <?php 
+                       if (isset($options))
+                       {
+                          echo $comment->getParsedContent($options);
+                       }
+                       else
+                       {
+                          echo $comment->getParsedContent();
+                       }
+                    ?>
                 </div>
                 <?php if ((\thebuggenie\core\framework\Context::isProjectContext() && !\thebuggenie\core\framework\Context::getCurrentProject()->isArchived()) || !\thebuggenie\core\framework\Context::isProjectContext()) : ?>
                     <div class="commenttools action-buttons">
