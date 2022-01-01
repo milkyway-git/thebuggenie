@@ -2,7 +2,16 @@
     <?php if ($issue->isWorkflowTransitionsAvailable()): ?>
         <?php foreach ($issue->getAvailableWorkflowTransitions() as $transition): ?>
             <?php if ($transition instanceof \thebuggenie\core\entities\WorkflowTransition && $transition->hasTemplate()): ?>
-                <?php include_component($transition->getTemplate(), compact('issue', 'transition', 'ajax')); ?>
+                <?php
+                    if (isset($ajax))
+                    {
+                        include_component($transition->getTemplate(), compact('issue', 'transition', 'ajax')); 
+                    }
+                    else
+                    {
+                        include_component($transition->getTemplate(), compact('issue', 'transition')); 
+                    }
+                ?>
             <?php endif; ?>
         <?php endforeach; ?>
     <?php endif; ?>
