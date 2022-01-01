@@ -44,7 +44,7 @@
         /**
          * @Column(type="string", length=200)
          */
-        protected $_size;
+        protected $_size = null;
 
         /**
          * @Column(type="integer", length=10)
@@ -198,13 +198,20 @@
         public function getReadableFilesize()
         {
             $size = $this->getSize();
-            if ($size > 1024 * 1024)
+            if ($size !== null)
             {
-                return round(($size * 100 / (1024 * 1024)) / 100, 2) . 'MB';
+              if ($size > 1024 * 1024)
+              {
+                  return round(($size * 100 / (1024 * 1024)) / 100, 2) . 'MB';
+              }
+              else
+              {
+                  return round((intval($size) * 100 / 1024) / 100, 2) . 'KB';
+              }
             }
             else
             {
-                return round(($size * 100 / 1024) / 100, 2) . 'KB';
+              return '? KB';
             }
         }
 
