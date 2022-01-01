@@ -297,7 +297,10 @@
             if ($scope != Context::getScope()->getID() && $scope !== null)
             {
                 $setting = self::_loadSetting($name, $module, $scope);
-                return $setting[$uid] ?? null;
+                if ($setting != null)
+                {
+                    return $setting[$uid];
+                }
             }
             if (self::$_settings === null)
             {
