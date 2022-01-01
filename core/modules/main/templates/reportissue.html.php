@@ -21,7 +21,17 @@
             <?php echo __("What's the issue?"); ?>
         </div>
         <div id="reportissue_content">
-            <?php include_component('main/reportissue', $options); ?>
+            <?php 
+                if (isset($options))
+                {
+                    include_component('main/reportissue', $options); 
+                }
+                else
+                {
+                    include_component('main/reportissue'); 
+                }
+            
+            ?>
         </div>
     </div>
 <?php endif; ?>
