@@ -48,7 +48,7 @@
             return (array_key_exists($key, $this->_property_list)) ? true : false; 
         }
 
-        public function offsetUnset($key)
+        public function offsetUnset(mixed $key) : void
         {
             if (array_key_exists($key, $this->_property_list))
             {
@@ -56,19 +56,19 @@
             }
         }
 
-        public function offsetSet($key, $value)
+        public function offsetSet(mixed $key, mixed $value) : void
         {
             $this->__set($key, $value);
         }
 
-        public function offsetGet($key)
+        public function offsetGet(mixed $key) : mixed
         {
             return $this->__get($key);
         }
 
-        public function offsetExists($key)
+        public function offsetExists(mixed $key) : bool
         {
             return $this->__isset($key);
         }
-        
+
     }
