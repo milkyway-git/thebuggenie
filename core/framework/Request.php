@@ -589,22 +589,22 @@
             return $this->getParameter('format', 'html');
         }
 
-        public function offsetExists($offset)
+        public function offsetExists(mixed $offset) : bool
         {
             return $this->hasParameter($offset);
         }
 
-        public function offsetGet($offset)
+        public function offsetGet(mixed $offset) : mixed
         {
             return $this->getParameter($offset);
         }
 
-        public function offsetSet($offset, $value)
+        public function offsetSet(mixed $offset, mixed $value) : void
         {
             $this->setParameter($offset, $value);
         }
 
-        public function offsetUnset($offset)
+        public function offsetUnset(mixed $offset) : void
         {
             $this->setParameter($offset, null);
         }
