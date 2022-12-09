@@ -243,8 +243,17 @@ class Main extends framework\Action
         }
         elseif (framework\Context::hasMessage('issue_deleted_shown') && (is_null($issue) || ($issue instanceof entities\Issue && $issue->isDeleted())))
         {
-            $request_referer = ($request['referer'] ?: (isset($_SERVER['HTTP_REFERER']) ? $_SERVER['HTTP_REFERER'] : null));
-
+            if ($request['referer'])
+            {
+                if (isset($_SERVER['HTTP_REFERER']))
+                {
+                    $request_referer = $_SERVER['HTTP_REFERER'];
+                }
+                else
+                {
+                    $request_referer = null;
+                }
+            }
             if ($request_referer)
             {
                 return $this->forward($request_referer);
@@ -523,6 +532,7 @@ class Main extends framework\Action
                 {
                     case 'get_module_updates':
                         $addons_param = array('license_key' => framework\Settings::getLicenseIdentifier());
+                        $addons_json = [];
                         foreach ($request['addons'] as $addon) {
                             $addons_param[] = 'addons[]='.$addon;
                         }
@@ -552,6 +562,7 @@ class Main extends framework\Action
                         break;
                     case 'get_theme_updates':
                         $addons_param = array('license_key' => framework\Settings::getLicenseIdentifier());
+                        $addons_json = [];
                         foreach ($request['addons'] as $addon) {
                             $addons_param[] = 'themes[]='.$addon;
                         }
@@ -2880,7 +2891,17 @@ class Main extends framework\Action
      */
     public function runDeleteIssue(framework\Request $request)
     {
-        $request_referer = ($request['referer'] ?: (isset($_SERVER['HTTP_REFERER']) ? $_SERVER['HTTP_REFERER'] : null));
+        if ($request['referer'])
+        {
+          if (isset($_SERVER['HTTP_REFERER']))
+          {
+              $request_referer = $_SERVER['HTTP_REFERER'];
+          }
+          else
+          {
+              $request_referer = null;
+          }
+        }
 
         if ($issue_id = $request['issue_id'])
         {
@@ -2953,7 +2974,32 @@ class Main extends framework\Action
         $teamup_callback = $request['teamup_callback'];
         $team_callback = $request['team_callback'];
         $callback = $request['callback'];
-        return $this->renderComponent('identifiableselectorresults', compact('users', 'teams', 'clients', 'callback', 'teamup_callback', 'team_callback'));
+        $paramarray = array();
+        if (isset($users))
+        {
+            $paramarray['users'] = $users;
+        }
+        if (isset($teams))
+        {
+            $paramarray['teams'] = $teams;
+        }
+        if (isset($clients))
+        {
+            $paramarray['clients'] = $clients;
+        }
+        if (isset($callback))
+        {
+            $paramarray['callback'] = $callback;
+        }
+        if (isset($teamup_callback))
+        {
+            $paramarray['teamup_callback'] = $teamup_callback;
+        }
+        if (isset($team_callback))
+        {
+            $paramarray['team_callback'] = $team_callback;
+        }
+        return $this->renderComponent('identifiableselectorresults', $paramarray);
     }
 
     /**
@@ -3633,14 +3679,11 @@ class Main extends framework\Action
         try
         {
             $template_name = null;
+            $options = array();
             if ($request->hasParameter('issue_id'))
             {
                 $issue = tables\Issues::getTable()->selectById($request['issue_id']);
                 $options = array('issue' => $issue);
-            }
-            else
-            {
-                $options = array();
             }
             switch ($request['key'])
             {
@@ -4910,14 +4953,19 @@ class Main extends framework\Action
         try
         {
             $issue = tables\Issues::getTable()->getIssueById((int) $request['issue_id']);
-
-            $board = null;
             if ($request['board_id']) $board = agile\entities\tables\AgileBoards::getTable()->selectById((int) $request['board_id']);
 
-            $times = ($board === null || $board->getType() != agile\entities\AgileBoard::TYPE_KANBAN);
+            $times = (!isset($board) || $board->getType() != agile\entities\AgileBoard::TYPE_KANBAN);
             $estimator_mode = isset($request['estimator_mode']) ? $request['estimator_mode'] : null;
 
-            return $this->renderJSON(array('menu' => $this->getComponentHTML('main/issuemoreactions', compact('issue', 'times', 'board', 'estimator_mode'))));
+            if (isset($board))
+            {
+              return $this->renderJSON(array('menu' => $this->getComponentHTML('main/issuemoreactions', compact('issue', 'times', 'board', 'estimator_mode'))));
+            }
+            else
+            {
+              return $this->renderJSON(array('menu' => $this->getComponentHTML('main/issuemoreactions', compact('issue', 'times', 'estimator_mode'))));
+            }
         }
         catch (\Exception $e)
         {
