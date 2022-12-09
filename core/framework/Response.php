@@ -306,7 +306,11 @@
          */
         public function hasTitle()
         {
-            return (trim($this->_title) != '') ? true : false;
+            if ($this->_title != null)
+            {
+                return (trim($this->_title) != '') ? true : false;
+            }
+            return false;
         }
 
         /**
