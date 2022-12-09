@@ -499,29 +499,49 @@
          */
         public function getRouteFromUrl($url)
         {
-            Logging::log("URL is '".htmlentities($url, ENT_COMPAT, 'utf-8')."'", 'routing');
+            if ($url != null)
+            {
+                Logging::log("URL is '".htmlentities($url, ENT_COMPAT, 'utf-8')."'", 'routing');
+                if (mb_strlen($url) == 0 || '/' != $url[0])
+                {
+                    $url = '/'.$url;
+                }
+                if (mb_strlen($url) > 1 && mb_substr($url, -1) == '/')
+                {
+                    $url = mb_substr($url, 0, -1);
+                }
+            }
+            else
+            {
+                Logging::log('URL is NULL', 'routing');
+            }
             // an URL should start with a '/', mod_rewrite doesn't respect that, but no-mod_rewrite version does.
-            if (mb_strlen($url) == 0 || '/' != $url[0])
+            if ($url != null)
             {
-                $url = '/'.$url;
+                Logging::log("URL is now '".htmlentities($url, ENT_COMPAT, 'utf-8')."'", 'routing');
+                // we remove the query string
+                if ($pos = mb_strpos($url, '?'))
+                {
+                    $url = mb_substr($url, 0, $pos);
+                }
             }
-            if (mb_strlen($url) > 1 && mb_substr($url, -1) == '/')
+            else
             {
-                $url = mb_substr($url, 0, -1);
-            }
-            Logging::log("URL is now '".htmlentities($url, ENT_COMPAT, 'utf-8')."'", 'routing');
-
-            // we remove the query string
-            if ($pos = mb_strpos($url, '?'))
-            {
-                $url = mb_substr($url, 0, $pos);
+                Logging::log('URL is now NULL', 'routing');
             }
 
             $break = false;
 
             // we remove multiple /
-            $url = preg_replace('#/+#', '/', $url);
-            Logging::log("URL is now '".htmlentities($url, ENT_COMPAT, 'utf-8')."'", 'routing');
+            if ($url != null)
+            {
+                $url = preg_replace('#/+#', '/', $url);
+                Logging::log("URL is now '".htmlentities($url, ENT_COMPAT, 'utf-8')."'", 'routing');
+            }
+            else
+            {
+                Logging::log('URL is now NULL', 'routing');
+            }
             foreach ($this->routes as $route_name => $route)
             {
                 $out = array();
@@ -529,7 +549,7 @@
                 list($route, $regexp, $names, $names_hash, $module, $action, $params, $options, $allowed_methods, ) = $route;
 
                 $break = false;
-                if (preg_match($regexp, $url, $r))
+                if ($url != null && preg_match($regexp, $url, $r))
                 {
                     $break = true;
 
