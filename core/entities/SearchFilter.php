@@ -574,7 +574,7 @@
          * <p>
          * The return value will be casted to boolean if non-boolean was returned.
          */
-        public function offsetExists($offset)
+        public function offsetExists(mixed $offset): bool
         {
             return in_array($offset, array('operator', 'o', 'value', 'v', 'key', 'filter', 'filter_key'));
         }
@@ -588,7 +588,7 @@
          * </p>
          * @return mixed Can return all value types.
          */
-        public function offsetGet($offset)
+        public function offsetGet(mixed $offset): mixed
         {
             switch ($offset)
             {
@@ -617,7 +617,7 @@
          * </p>
          * @return void
          */
-        public function offsetSet($offset, $value)
+        public function offsetSet(mixed $offset, mixed $value): void
         {
             switch ($offset)
             {
@@ -641,7 +641,7 @@
          * </p>
          * @return void
          */
-        public function offsetUnset($offset)
+        public function offsetUnset(mixed $offset): void
         {
             // TODO: Implement offsetUnset() method.
         }
