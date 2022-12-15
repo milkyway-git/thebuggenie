@@ -510,7 +510,7 @@
         if (!$skipusertimestamp)
         {
             $tz = \thebuggenie\core\framework\Context::getUser()->getTimezone();
-            $tstamp = $tz->getOffset(new DateTime(null, \thebuggenie\core\framework\Settings::getServerTimezone()));
+            $tstamp = $tz->getOffset(new DateTime('now', \thebuggenie\core\framework\Settings::getServerTimezone()));
         }
         else
         {
