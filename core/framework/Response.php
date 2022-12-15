@@ -539,7 +539,7 @@
         {
             $expiration = ($expiration !== null) ? intval(NOW + $expiration) : null;
             $secure = Context::getScope()->isSecure();
-            setcookie($key, $value, $expiration, Context::getWebroot(), null, $secure);
+            setcookie($key, $value, $expiration, Context::getWebroot(), '', $secure);
             return true;
         }
 
