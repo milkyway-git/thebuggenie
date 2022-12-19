@@ -21,7 +21,14 @@
                 <li class="b2db-hidden-toggler" onclick="$(this).up().toggleClassName('b2db-hidden-visible');">...</li>
                 <?php foreach ($details['backtrace'] as $trace): ?>
                     <?php
-                        $file_details = explode(DS, $trace['file']);
+                        if (isset($trace['file']))
+                        {
+                            $file_details = explode(DS, $trace['file']);
+                        }
+                        else
+                        {
+                            $file_details =array();
+                        }
                         $filename = array_pop($file_details);
                         $classname = (isset($trace['class'])) ? $trace['class'] : '';
                         $type = (isset($trace['type'])) ? $trace['type'] : '';
