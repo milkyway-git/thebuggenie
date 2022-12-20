@@ -318,61 +318,61 @@
             switch ($id)
             {
                 case 1 : // 14:45 - Thu Dec 30, 2010
-                    $format = '%H:%M - %a %b %d, %Y';
+                    $format = 'H:i - D M d, Y';
                     break;
-                case 2 : // 14:45 - Thu 30.m, 2010
-                    $format = '%H:%M - %a %d.m, %Y';
+                case 2 : // 14:45 - Thu 30.12., 2010
+                    $format = 'H:i - D d.m., Y';
                     break;
                 case 3 : // Thu Dec 30 14:45
-                    $format = '%a %b %d %H:%M';
+                    $format = 'D M d H:i';
                     break;
                 case 4 : // Dec 30 14:45
-                    $format = '%b %d %H:%M';
+                    $format = 'M d H:i';
                     break;
                 case 5 : // December 30, 2010
-                    $format = '%B %d, %Y';
+                    $format = 'F d, Y';
                     break;
                 case 6 : // December 30, 2010 (14:45)
-                    $format = '%B %d, %Y (%H:%M)';
+                    $format = 'F d, Y (H:i)';
                     break;
                 case 7 : // Thursday 30 December, 2010 (14:45)
-                    $format = '%A %d %B, %Y (%H:%M)';
+                    $format = 'l d F, Y (H:i)';
                     break;
                 case 8 : // Dec 30, 2010 14:45
-                    $format = '%b %d, %Y %H:%M';
+                    $format = 'M d, Y H:i';
                     break;
                 case 9 : // Dec 30, 2010 - 14:45
-                    $format = '%b %d, %Y - %H:%M';
+                    $format = 'M d, Y - H:i';
                     break;
                 case 10 : // Dec 30, 2010 (14:45)
-                    $format = '%b %d, %Y (%H:%M)';
+                    $format = 'M d, Y (H:i)';
                     break;
                 case 11 : // December
-                    $format = '%B';
+                    $format = 'F';
                     break;
                 case 12 : // Dec 30
-                    $format = '%b %d';
+                    $format = 'M d';
                     break;
                 case 13 : // Thu
-                    $format = '%a';
+                    $format = 'D';
                     break;
                 case 14 : // 14:45
-                    $format = '%H:%M';
+                    $format = 'H:i';
                     break;
                 case 15 : // Dec 30, 2010
-                    $format = '%b %d, %Y';
+                    $format = 'M d, Y';
                     break;
                 case 16 : // 14h 45m
-                    $format = '%Gh %im';
+                    $format = 'G\h i\m';
                     break;
                 case 17 : // Thu, 30 December 2010 14:45:45 GMT
-                    $format = '%a, %d %b %Y %H:%M:%S GMT';
+                    $format = 'D, d F Y H:i:s GMT';
                     break;
-                case 18 : // Thu, 30 December 2010 14:45:45 GMT
-                    $format = '%Y-%M-%D';
+                case 18 : // 2010-12-30
+                    $format = 'Y-m-d';
                     break;
-                default : // local server setting
-                    $format = '%c';
+                default : // not supported: local server setting. will use ISO 8601
+                    $format = 'Y-m-d\TH:i:s';
             }
             return $format;
         }

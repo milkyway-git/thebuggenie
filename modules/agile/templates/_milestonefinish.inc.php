@@ -49,7 +49,7 @@
                     <td style="width: auto;">
                         <select style="width: 90px;" name="milestone_finish_reached_month" id="reached_month_<?php echo $milestone->getID(); ?>">
                         <?php for ($cc = 1;$cc <= 12;$cc++): ?>
-                            <option value="<?php echo $cc; ?>" <?php if ($milestone->getReachedMonth() == $cc || (!$milestone->hasReachedDate() && $cc == date('m'))) echo " selected"; ?>><?php echo strftime('%B', mktime(0, 0, 0, $cc, 1)); ?></option>
+                            <option value="<?php echo $cc; ?>" <?php if ($milestone->getReachedMonth() == $cc || (!$milestone->hasReachedDate() && $cc == date('m'))) echo " selected"; ?>><?php echo date('F', mktime(0, 0, 0, $cc, 1)); ?></option>
                         <?php endfor; ?>
                         </select>
                         <select style="width: 45px;" name="milestone_finish_reached_day" id="reached_day_<?php echo $milestone->getID(); ?>">

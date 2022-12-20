@@ -106,37 +106,37 @@
         switch ($format)
         {
             case 1:
-                $tstring = strftime(\thebuggenie\core\framework\Context::getI18n()->getDateTimeFormat(1), $tstamp);
+                $tstring = date(\thebuggenie\core\framework\Context::getI18n()->getDateTimeFormat(1), $tstamp);
                 break;
             case 2:
-                $tstring = strftime(\thebuggenie\core\framework\Context::getI18n()->getDateTimeFormat(2), $tstamp);
+                $tstring = date(\thebuggenie\core\framework\Context::getI18n()->getDateTimeFormat(2), $tstamp);
                 break;
             case 3:
-                $tstring = strftime(\thebuggenie\core\framework\Context::getI18n()->getDateTimeFormat(3), $tstamp);
+                $tstring = date(\thebuggenie\core\framework\Context::getI18n()->getDateTimeFormat(3), $tstamp);
                 break;
             case 4:
-                $tstring = strftime(\thebuggenie\core\framework\Context::getI18n()->getDateTimeFormat(4), $tstamp);
+                $tstring = date(\thebuggenie\core\framework\Context::getI18n()->getDateTimeFormat(4), $tstamp);
                 break;
             case 5:
-                $tstring = strftime(\thebuggenie\core\framework\Context::getI18n()->getDateTimeFormat(5), $tstamp);
+                $tstring = date(\thebuggenie\core\framework\Context::getI18n()->getDateTimeFormat(5), $tstamp);
                 break;
             case 6:
-                $tstring = strftime(\thebuggenie\core\framework\Context::getI18n()->getDateTimeFormat(6), $tstamp);
+                $tstring = date(\thebuggenie\core\framework\Context::getI18n()->getDateTimeFormat(6), $tstamp);
                 break;
             case 7:
-                $tstring = strftime(\thebuggenie\core\framework\Context::getI18n()->getDateTimeFormat(7), $tstamp);
+                $tstring = date(\thebuggenie\core\framework\Context::getI18n()->getDateTimeFormat(7), $tstamp);
                 break;
             case 8:
-                $tstring = strftime(\thebuggenie\core\framework\Context::getI18n()->getDateTimeFormat(8), $tstamp);
+                $tstring = date(\thebuggenie\core\framework\Context::getI18n()->getDateTimeFormat(8), $tstamp);
                 break;
             case 9:
-                $tstring = strftime(\thebuggenie\core\framework\Context::getI18n()->getDateTimeFormat(9), $tstamp);
+                $tstring = date(\thebuggenie\core\framework\Context::getI18n()->getDateTimeFormat(9), $tstamp);
                 break;
             case 10:
-                $tstring = strftime(\thebuggenie\core\framework\Context::getI18n()->getDateTimeFormat(10), $tstamp);
+                $tstring = date(\thebuggenie\core\framework\Context::getI18n()->getDateTimeFormat(10), $tstamp);
                 break;
             case 11:
-                $tstring = strftime(\thebuggenie\core\framework\Context::getI18n()->getDateTimeFormat(9), $tstamp);
+                $tstring = date(\thebuggenie\core\framework\Context::getI18n()->getDateTimeFormat(9), $tstamp);
                 break;
             case 12:
                 $tstring = '';
@@ -155,9 +155,9 @@
                 }
                 else
                 {
-                    $tstring .= strftime(\thebuggenie\core\framework\Context::getI18n()->getDateTimeFormat(12) . ', ', $tstamp);
+                    $tstring .= date(\thebuggenie\core\framework\Context::getI18n()->getDateTimeFormat(12) . ', ', $tstamp);
                 }
-                $tstring .= strftime(\thebuggenie\core\framework\Context::getI18n()->getDateTimeFormat(14), $tstamp);
+                $tstring .= date(\thebuggenie\core\framework\Context::getI18n()->getDateTimeFormat(14), $tstamp);
                 break;
             case 13:
                 $tstring = '';
@@ -176,9 +176,9 @@
                 }
                 else
                 {
-                    $tstring .= strftime(\thebuggenie\core\framework\Context::getI18n()->getDateTimeFormat(12) . ', ', $tstamp);
+                    $tstring .= date(\thebuggenie\core\framework\Context::getI18n()->getDateTimeFormat(12) . ', ', $tstamp);
                 }
-                $tstring .= strftime(\thebuggenie\core\framework\Context::getI18n()->getDateTimeFormat(14), $tstamp);
+                $tstring .= date(\thebuggenie\core\framework\Context::getI18n()->getDateTimeFormat(14), $tstamp);
                 break;
             case 14:
                 $tstring = '';
@@ -197,96 +197,50 @@
                 }
                 else
                 {
-                    $tstring .= strftime(\thebuggenie\core\framework\Context::getI18n()->getDateTimeFormat(12), $tstamp);
+                    $tstring .= date(\thebuggenie\core\framework\Context::getI18n()->getDateTimeFormat(12), $tstamp);
                 }
                 break;
             case 15:
-                $tstring = strftime(\thebuggenie\core\framework\Context::getI18n()->getDateTimeFormat(11), $tstamp);
+                $tstring = date(\thebuggenie\core\framework\Context::getI18n()->getDateTimeFormat(11), $tstamp);
                 break;
             case 16:
-                $tstring = strftime(\thebuggenie\core\framework\Context::getI18n()->getDateTimeFormat(12), $tstamp);
+                $tstring = date(\thebuggenie\core\framework\Context::getI18n()->getDateTimeFormat(12), $tstamp);
                 break;
             case 17:
-                $tstring = strftime(\thebuggenie\core\framework\Context::getI18n()->getDateTimeFormat(13), $tstamp);
+                $tstring = date(\thebuggenie\core\framework\Context::getI18n()->getDateTimeFormat(13), $tstamp);
                 break;
             case 18:
-                $tstring = strftime(\thebuggenie\core\framework\Context::getI18n()->getDateTimeFormat(16), $tstamp);
+                $tstring = date(\thebuggenie\core\framework\Context::getI18n()->getDateTimeFormat(16), $tstamp);
                 break;
             case 19:
-                $tstring = strftime(\thebuggenie\core\framework\Context::getI18n()->getDateTimeFormat(14), $tstamp);
+                $tstring = date(\thebuggenie\core\framework\Context::getI18n()->getDateTimeFormat(14), $tstamp);
                 break;
             case 20:
                 $tstring = '';
                 $days = day_delta($tstamp, $tzoffset);
                 if ($days == 0)
                 {
-                    $tstring .= __('Today') . ' (' . strftime('%H:%M', $tstamp) . ')';
+                    $tstring .= __('Today') . ' (' . date('H:i', $tstamp) . ')';
                 }
                 elseif ($days == -1)
                 {
-                    $tstring .= __('Yesterday') . ' (' . strftime('%H:%M', $tstamp) . ')';
+                    $tstring .= __('Yesterday') . ' (' . date('H:i', $tstamp) . ')';
                 }
                 elseif ($days == 1)
                 {
-                    $tstring .= __('Tomorrow') . ' (' . strftime('%H:%M', $tstamp) . ')';
+                    $tstring .= __('Tomorrow') . ' (' . date('H:i', $tstamp) . ')';
                 }
                 else
                 {
-                    $tstring .= strftime(\thebuggenie\core\framework\Context::getI18n()->getDateTimeFormat(15), $tstamp);
+                    $tstring .= date(\thebuggenie\core\framework\Context::getI18n()->getDateTimeFormat(15), $tstamp);
                 }
                 break;
             case 21:
-                $tstring = strftime('%a, %d %b %Y %H:%M:%S ', $tstamp);
-//                if (!$skipusertimestamp && \thebuggenie\core\framework\Settings::getUserTimezone() != 'sys')
-//                {
-//                    if (\thebuggenie\core\framework\Settings::getUserTimezone() != 0)
-//                    {
-//                        $offset = \thebuggenie\core\framework\Settings::getUserTimezone() * 100;
-//                    }
-//                }
-//                elseif (\thebuggenie\core\framework\Settings::getGMToffset() != 0)
-//                {
-//                    $offset = \thebuggenie\core\framework\Settings::getGMToffset() * 100;
-//                }
-//
-//                if (!isset($offset))
-//                {
-//                    $offset = 'GMT';
-//                }
-//
-//                if ($offset == 0)
-//                {
-//                    $offset = 'GMT';
-//                }
-//                elseif ($offset != 'GMT')
-//                {
-//                    $negative = false;
-//                    if (strstr($offset, '-'))
-//                    {
-//                        $offset = trim($offset, '-');
-//                        $negative = true;
-//                    }
-//
-//                    if ($offset < 1000)
-//                    {
-//                        $offset = '0'.$offset;
-//                    }
-//
-//                    if ($negative)
-//                    {
-//                        $offset = '-'.$offset;
-//                    }
-//                    else
-//                    {
-//                        $offset = '+'.$offset;
-//                    }
-//                }
-//
-//                $tstring .= $offset;
+                $tstring = date('D, Y-m-d H:i:s', $tstamp);
                 return ($tstring);
                 break;
             case 22:
-                $tstring = strftime(\thebuggenie\core\framework\Context::getI18n()->getDateTimeFormat(15), $tstamp);
+                $tstring = date(\thebuggenie\core\framework\Context::getI18n()->getDateTimeFormat(15), $tstamp);
                 break;
             case 23:
                 $tstring = '';
@@ -305,30 +259,30 @@
                 }
                 else
                 {
-                    $tstring .= strftime(\thebuggenie\core\framework\Context::getI18n()->getDateTimeFormat(15), $tstamp);
+                    $tstring .= date(\thebuggenie\core\framework\Context::getI18n()->getDateTimeFormat(15), $tstamp);
                 }
                 break;
             case 24:
-                $tstring = strftime(\thebuggenie\core\framework\Context::getI18n()->getDateTimeFormat(18), $tstamp);
+                $tstring = date(\thebuggenie\core\framework\Context::getI18n()->getDateTimeFormat(18), $tstamp);
                 break;
             case 25:
                 $tstring = '';
                 $days = day_delta($tstamp, $tzoffset);
                 if ($days == 0)
                 {
-                    $tstring .= __('Today') . ' (' . strftime('%H:%M', $tstamp) . ')';
+                    $tstring .= __('Today') . ' (' . date('H:i', $tstamp) . ')';
                 }
                 elseif ($days == -1)
                 {
-                    $tstring .= __('Yesterday') . ' (' . strftime('%H:%M', $tstamp) . ')';
+                    $tstring .= __('Yesterday') . ' (' . date('H:i', $tstamp) . ')';
                 }
                 elseif ($days == 1)
                 {
-                    $tstring .= __('Tomorrow') . ' (' . strftime('%H:%M', $tstamp) . ')';
+                    $tstring .= __('Tomorrow') . ' (' . date('H:i', $tstamp) . ')';
                 }
                 else
                 {
-                    $tstring .= strftime(\thebuggenie\core\framework\Context::getI18n()->getDateTimeFormat(10), $tstamp);
+                    $tstring .= date(\thebuggenie\core\framework\Context::getI18n()->getDateTimeFormat(10), $tstamp);
                 }
                 break;
             default:
