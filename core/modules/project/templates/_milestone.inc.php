@@ -63,7 +63,7 @@
                     <td style="width: auto;">
                         <select style="width: 90px;" name="starting_month" id="starting_month_<?= $milestone->getID(); ?>"<?php if (!$milestone->hasStartingDate()): ?> disabled<?php endif; ?>>
                         <?php for ($cc = 1;$cc <= 12;$cc++): ?>
-                            <option value="<?= $cc; ?>" <?php if ($milestone->getStartingMonth() == $cc || (!$milestone->hasStartingDate() && $cc == date('m'))) echo " selected"; ?>><?= strftime('%B', mktime(0, 0, 0, $cc, 1)); ?></option>
+                            <option value="<?= $cc; ?>" <?php if ($milestone->getStartingMonth() == $cc || (!$milestone->hasStartingDate() && $cc == date('m'))) echo " selected"; ?>><?= date('F', mktime(0, 0, 0, $cc, 1)); ?></option>
                         <?php endfor; ?>
                         </select>
                         <select style="width: 45px;" name="starting_day" id="starting_day_<?= $milestone->getID(); ?>"<?php if (!$milestone->hasStartingDate()): ?> disabled<?php endif; ?>>
@@ -86,7 +86,7 @@
                     <td style="width: auto;">
                         <select style="width: 90px;" name="sch_month" id="sch_month_<?= $milestone->getID(); ?>" <?php print (!$milestone->hasScheduledDate()) ? "disabled" : ""; ?>>
                         <?php for ($cc = 1;$cc <= 12;$cc++): ?>
-                            <option value="<?= $cc; ?>" <?php if ($milestone->getScheduledMonth() == $cc || (!$milestone->hasScheduledDate() && $cc == date('m'))) echo " selected"; ?>><?= strftime('%B', mktime(0, 0, 0, $cc, 1)); ?></option>
+                            <option value="<?= $cc; ?>" <?php if ($milestone->getScheduledMonth() == $cc || (!$milestone->hasScheduledDate() && $cc == date('m'))) echo " selected"; ?>><?= date('F', mktime(0, 0, 0, $cc, 1)); ?></option>
                         <?php endfor; ?>
                         </select>
                         <select style="width: 45px;" name="sch_day" id="sch_day_<?= $milestone->getID(); ?>" <?php print (!$milestone->hasScheduledDate()) ? "disabled" : ""; ?>>
