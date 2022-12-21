@@ -625,7 +625,7 @@
         {
             if (!is_array($this->_sortfields))
             {
-                if (!strlen($this->_sortfields))
+                if ($this->_sortfields == null || !strlen($this->_sortfields))
                 {
                     $this->_sortfields = array(tables\Issues::LAST_UPDATED => 'desc');
                 }
