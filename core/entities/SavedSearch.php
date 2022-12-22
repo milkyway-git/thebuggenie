@@ -686,18 +686,21 @@
 
         protected function _initializeColumns()
         {
-            if (!is_array($this->_columns))
+            if ($this->_columns != null)
             {
-                if (!strlen($this->_columns))
+                if (!is_array($this->_columns))
                 {
-                    if ($columns = \thebuggenie\core\framework\Settings::get('search_scs_'.$this->getTemplateName(), 'core', null, framework\Context::getUser()->getID()))
-                        $this->_columns = explode(',', $columns);
+                    if (!strlen($this->_columns))
+                    {
+                        if ($columns = \thebuggenie\core\framework\Settings::get('search_scs_'.$this->getTemplateName(), 'core', null, framework\Context::getUser()->getID()))
+                            $this->_columns = explode(',', $columns);
+                        else
+                            $this->_columns = self::getDefaultVisibleColumns();
+                    }
                     else
-                        $this->_columns = self::getDefaultVisibleColumns();
-                }
-                else
-                {
-                    $this->_columns = explode(',', $this->_columns);
+                    {
+                        $this->_columns = explode(',', $this->_columns);
+                    }
                 }
             }
         }
