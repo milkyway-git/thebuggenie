@@ -483,7 +483,7 @@
 
         public function isRedirect()
         {
-            if (mb_substr($this->getContent(), 0, 10) == "#REDIRECT ")
+            if ($this->getContent() != null && mb_substr($this->getContent(), 0, 10) == "#REDIRECT ")
             {
                 $content = explode("\n", $this->getContent());
                 preg_match('/(\[\[([^\]]*?)\]\])$/im', mb_substr(array_shift($content), 10), $matches);
