@@ -772,6 +772,10 @@
          */
         public static function extractIssueNoFromNumber($issue_number)
         {
+            if ($issue_number == null)
+            {
+                return '';
+            }
             $issue_no = mb_strtolower(trim($issue_number));
             if (mb_strpos($issue_no, ' ') !== false)
             {
