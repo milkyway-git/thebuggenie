@@ -12,7 +12,7 @@
             <?php include_component('search/interactivefilter', array('filter' => $search_object->getFilter('category'))); ?>
             <input type="hidden" name="sortfields" value="<?= $search_object->getSortFieldsAsString(); ?>" id="search_sortfields_input">
             <input type="hidden" name="fs[text][o]" value="=">
-            <input type="search" name="fs[text][v]" id="interactive_filter_text" value="<?= htmlentities($search_object->getSearchTerm(), ENT_QUOTES, \thebuggenie\core\framework\Context::getI18n()->getCharset()); ?>" class="filter_searchfield" placeholder="<?= __('Enter a search term here'); ?>">
+            <input type="search" name="fs[text][v]" id="interactive_filter_text" value="<?= htmlentities($search_object->getSearchTerm() != null ? $search_object->getSearchTerm() : '', ENT_QUOTES, \thebuggenie\core\framework\Context::getI18n()->getCharset()); ?>" class="filter_searchfield" placeholder="<?= __('Enter a search term here'); ?>">
             <div class="interactive_plus_container" id="interactive_filters_availablefilters_container">
                 <div class="interactive_plus_button" id="interactive_plus_button"><?= fa_image_tag('plus'); ?></div>
                 <div class="interactive_filters_list <?= (count($nondatecustomfields)) ? 'three_columns' : 'two_columns'; ?>">
