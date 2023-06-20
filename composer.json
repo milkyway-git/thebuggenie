@@ -18,7 +18,7 @@
     "require" : {
         "php": "^7.4|^8.0",
         "thebuggenie/b2db" : "^3.0",
-        "swiftmailer/swiftmailer" : "4.2.*",
+        "symfony/mailer" : "6.3.*",
         "webit/eval-math" : "^1.0",
         "mustangostang/spyc": "0.5.*",
         "realityking/pchart": "dev-master",
