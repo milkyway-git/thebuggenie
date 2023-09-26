@@ -56,6 +56,7 @@
         private   $deflist = false;
         private   $stop = false;
         private   $stop_all = false;
+        private   $namespace = null;
         
         /**
          * Add a regex to be parsed, with a function callback
