@@ -167,6 +167,13 @@
         protected $_hours;
 
         /**
+         * Minutes spent or estimated
+         *
+         * @var array
+         */
+        protected $_minutes;
+
+        /**
          * Calculated burndown data
          *
          * @var array
