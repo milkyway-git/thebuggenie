@@ -342,7 +342,7 @@
     {
         if (tbg_isUTF8($str) && !mb_stristr(\thebuggenie\core\framework\Context::getI18n()->getCharset(), 'UTF-8'))
         {
-            $str = utf8_decode($str);
+            $str = mb_convert_encoding($str, 'ISO-8859-1', 'UTF-8');
         }
 
         if ($htmlentities)
