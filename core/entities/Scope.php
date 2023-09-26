@@ -69,6 +69,8 @@
 
         protected $_used_storage = null;
 
+        private $_hostname = null;
+        
         /**
          * @var boolean
          * @Column(type="boolean")
