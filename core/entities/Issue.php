@@ -34,6 +34,7 @@
      *
      * @Table(name="\thebuggenie\core\entities\tables\Issues")
      */
+#[\AllowDynamicProperties]
     class Issue extends Changeable implements MentionableProvider, Attachable
     {
 
