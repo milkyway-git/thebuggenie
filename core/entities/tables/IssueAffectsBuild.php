@@ -38,6 +38,7 @@
         const STATUS = 'issueaffectsbuild.status';
 
         protected $_preloaded_values = null;
+        protected $_preloaded_custom_fields = null;
 
         protected function initialize()
         {
