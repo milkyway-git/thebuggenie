@@ -51,6 +51,12 @@
         protected $toc = array();
         protected $text = null;
 
+        private   $list_level_types = null;
+        private   $list_level = 0;
+        private   $deflist = false;
+        private   $stop = false;
+        private   $stop_all = false;
+        
         /**
          * Add a regex to be parsed, with a function callback
          *
