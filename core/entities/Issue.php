@@ -2547,8 +2547,10 @@
          */
         public function setTitle($title)
         {
-            if (trim($title) == '')
-            {
+            if ($title == null) {
+                throw new \Exception("Can't set an empty title");
+            }
+            if (trim($title) == '') {
                 throw new \Exception("Can't set an empty title");
             }
             $this->_addChangedProperty('_title', $title);
@@ -2644,6 +2646,9 @@
          */
         public function hasDescription()
         {
+            if ($this->getDescription() === null) {
+              return false;
+            }
             return (bool) (trim($this->getDescription()) != '');
         }
 
@@ -2654,6 +2659,9 @@
          */
         public function hasShortname()
         {
+            if ($this->getShortname() === null) {
+              return false;
+            }
             return (bool) (trim($this->getShortname()) != '');
         }
 
@@ -3460,6 +3468,9 @@
         public static function convertFancyStringToTime($string, self $issue)
         {
             $retarr = common\Timeable::getZeroedUnitsWithPoints();
+            if ($string === null) {
+              $string = '';
+            }
             $string = mb_strtolower(trim($string));
             $time_arr = preg_split('/(\,|\/|and|or|plus)/', $string);
             foreach ($time_arr as $time_elm)
