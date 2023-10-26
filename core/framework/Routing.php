@@ -541,6 +541,7 @@
             else
             {
                 Logging::log('URL is now NULL', 'routing');
+                $url = '/';
             }
             foreach ($this->routes as $route_name => $route)
             {
@@ -641,7 +642,7 @@
             {
                 Logging::log('no matching route found', 'routing');
 
-                return null;
+                return array();
             }
 
             foreach ($out as $key => $val)
