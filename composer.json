@@ -76,15 +76,14 @@
     "suggest" : {
         "ext-apc" : "Enables APC caching of configuration files and table class definitions"
     },
-
     "autoload": {
         "psr-0": {
             "Assetic": ["vendor/assetic-php/assetic/src/"]
         },
-        "psr-4" : {
+        "psr-4": {
             "thebuggenie\\modules\\" : "modules/",
             "thebuggenie\\core\\" : "core/"
-        }
+        },
         "files": [
             "vendor/assetic-php/assetic/src/functions.php"
             ],
