@@ -8,12 +8,6 @@
     use thebuggenie\modules\publish\entities\Article,
         thebuggenie\modules\mailing\entities\IncomingEmailAccount,
         thebuggenie\modules\mailing\entities\tables\MailQueueTable,
-        Swift_Message,
-        Swift_Mime_Message,
-        Swift_Mailer,
-        Swift_MailTransport,
-        Swift_SmtpTransport,
-        Swift_SendmailTransport,
         League\HTMLToMarkdown\HtmlConverter,
         thebuggenie\core\framework\Settings as FrameworkSettings,
         thebuggenie\core\framework,
@@ -283,21 +277,24 @@ EOT;
         }
 
         /**
-         * Gets a configured Swift_Message object
+         * Gets a configured (Symfony MIME) Email object
          *
          * @param string $subject
          * @param string $message_plain
          * @param string $message_html
          */
-        public function getSwiftMessage($subject, $message_plain, $message_html)
+        public function getSymfonyMail($subject, $message_plain, $message_html)
         {
-            require_once THEBUGGENIE_VENDOR_PATH . 'swiftmailer' . DS . 'swiftmailer' . DS . 'lib' . DS . 'swift_required.php';
-            $message = Swift_Message::newInstance();
-            $message->setSubject($subject);
-            $message->setFrom(array($this->getEmailFromAddress() => $this->getEmailFromName()));
-            $message->setBody($message_plain);
-            $message->addPart($message_html, 'text/html');
-            return $message;
+            require_once THEBUGGENIE_VENDOR_PATH . 'symfony' . DS . 'mime' . DS . 'Address.php';
+            require_once THEBUGGENIE_VENDOR_PATH . 'symfony' . DS . 'mime' . DS . 'Email.php';
+
+            $address = new \Symfony\Component\Mime\Address($this->getEmailFromAddress(), $this->getEmailFromName());
+            $email = new \Symfony\Component\Mime\Email();
+            $email->from($address);
+            $email->subject($subject);
+            $email->text($message_plain);
+            $email->html($message_html);
+            return $email;
         }
 
         public function getUsersAndLanguages($users)
@@ -339,12 +336,13 @@ EOT;
                     $i18n->setLanguage($language);
                     $body_parts = $this->getEmailTemplates($template, $parameters);
                     $translated_subject = $i18n->__($subject, $subject_parameters);
-                    $message = $this->getSwiftMessage(html_entity_decode($translated_subject, ENT_NOQUOTES, $i18n->getCharset()), $body_parts[0], $body_parts[1]);
+                    $mail = $this->getSymfonyMail(html_entity_decode($translated_subject, ENT_NOQUOTES, $i18n->getCharset()), $body_parts[0], $body_parts[1]);
                     foreach ($users as $user)
                     {
-                        $message->addTo($user->getEmail(), $user->getName());
+                        $address = new \Symfony\Component\Mime\Address($user->getEmail(), $user->getName());
+                        $mail->to($address);
                     }
-                    $messages[] = $message;
+                    $messages[] = $mail;
                     framework\Context::getI18n()->setLanguage($current_language);
                 }
                 catch (\Exception $e)
@@ -416,8 +414,8 @@ EOT;
                 return;
             }
 
-//                The following line is included for the i18n parser to pick up the translatable string:
-//                __('Password reset');
+//          The following line is included for the i18n parser to pick up the translatable string:
+//          __('Password reset');
             $subject = 'Password reset';
             $user = $event->getSubject();
             $parameters = array('user' => $user, 'password' => $event->getParameter('password'));
@@ -435,8 +433,8 @@ EOT;
                 return;
             }
 
-//                The following line is included for the i18n parser to pick up the translatable string:
-//                __('Forgot your password?');
+//          The following line is included for the i18n parser to pick up the translatable string:
+//          __('Forgot your password?');
             $subject = 'Forgot your password?';
             $parameters = compact('user');
             $messages = $this->getTranslatedMessages('forgottenpassword', $parameters, array($user), $subject);
@@ -455,8 +453,8 @@ EOT;
 
             $subject = framework\Context::getI18n()->__('Test email');
             $body_parts = $this->getEmailTemplates('testemail');
-            $message = $this->getSwiftMessage($subject, $body_parts[0], $body_parts[1]);
-            $message->addTo($email_address);
+            $message = $this->getSymfonyMail($subject, $body_parts[0], $body_parts[1]);
+            $message->to($email_address);
             return $this->sendMail($message);
     }
 
@@ -524,7 +522,7 @@ EOT;
             return $users;
         }
 
-        protected function _addProjectEmailAddress(Swift_Mime_Message $message, Project $project = null)
+        protected function _addProjectEmailAddress(\Symfony\Component\Mime\Email $message, Project $project = null)
         {
             if ($project instanceof Project)
             {
@@ -532,7 +530,8 @@ EOT;
                 $name = $this->getSetting(self::SETTING_PROJECT_FROM_NAME . $project->getID());
                 if ($address != '')
                 {
-                    $message->setFrom($address, $name);
+                    $mailaddress = new \Symfony\Component\Mime\Address($address, $name);
+                    $message->from($mailaddress);
                 }
             }
         }
@@ -946,63 +945,75 @@ EOT;
         /**
          * Retrieve the instantiated and configured mailer object
          *
-         * @return Swift_Mailer
+         * @return Symfony Mailer
          */
         public function getMailer()
         {
             if ($this->mailer === null)
             {
-                require_once THEBUGGENIE_VENDOR_PATH . DS . 'swiftmailer' . DS . 'swiftmailer' . DS . 'lib' . DS . 'swift_required.php';
-                switch ($this->getMailerType()) {
-                    case self::MAIL_TYPE_SENDMAIL:
-                        $command = $this->getSendmailCommand();
-                        $transport = ($command) ? Swift_SendmailTransport::newInstance($command) : Swift_SendmailTransport::newInstance();
-                        break;
-                    case self::MAIL_TYPE_SMTP:
-                        $transport = Swift_SmtpTransport::newInstance($this->getSmtpHost(), $this->getSmtpPort());
-                        if ($this->getSmtpUsername())
+                if ($this->getMailerType() == self::MAIL_TYPE_SMTP) {
+                    $dsn = 'smtp://';
+                    if ($this->getSmtpUsername() != '')
+                    {
+                        $dsn .= $this->getSmtpUsername();
+                        if ($this->getSmtpPassword() != '')
                         {
-                            $transport->setUsername($this->getSmtpUsername());
-                            $transport->setPassword($this->getSmtpPassword());
+                            $dsn .= ':';
+                            $dsn .= $this->getSmtpPassword();
                         }
-                        if ($this->getSmtpTimeout()) $transport->setTimeout($this->getSmtpTimeout());
-                        if (in_array($this->getSmtpEncryption(), array('ssl', 'tls'))) $transport->setEncryption($this->getSmtpEncryption());
-                        break;
-                    case self::MAIL_TYPE_PHP:
-                    default:
-                        $transport = Swift_MailTransport::newInstance();
-                        break;
-                }
-                $mailer = Swift_Mailer::newInstance($transport);
+                        $dsn .= '@';
+                    }
+                    if ($this->getSmtpHost() != '')
+                    {
+                        $dsn .= $this->getSmtpHost();
+                    }
+                    else
+                    {
+                        $dsn .= 'localhost';
+                    }
+                    if ($this->getSmtpPort() > 0)
+                    {
+                        $dsn .= ':' . intval($this->getSmtpPort());
+                    }
+                } else if ($this->getMailerType() == self::MAIL_TYPE_SENDMAIL) {
+                    $dsn = 'sendmail://default';
+                    $command = $this->getSendmailCommand();
+                    if ($command != '')
+                    {
+                        $command = str_replace(' ', '%20', $command);
+                        $command = str_replace(':', '%3A', $command);
+                        $dsn .= '?command=' . $command;
+                    }
+                } else if ($this->getMailerType() == self::MAIL_TYPE_PHP) {
+                    $dsn = 'native://default';
+                } 
+                require_once THEBUGGENIE_VENDOR_PATH . DS . 'symfony' . DS . 'mailer' . DS . 'Mailer.php';
+                require_once THEBUGGENIE_VENDOR_PATH . DS . 'symfony' . DS . 'mailer' . DS . 'Transport.php';
+                $transport = \Symfony\Component\Mailer\Transport::fromDsn($dsn);
+                $mailer = new \Symfony\Component\Mailer\Mailer($transport);
                 $this->mailer = $mailer;
             }
 
             return $this->mailer;
         }
 
-        public function mail(Swift_Message $message)
+        public function mail(\Symfony\Component\Mime\Email $message)
         {
             $mailer = $this->getMailer();
             return $mailer->send($message);
         }
 
-        public function sendMail(Swift_Message $email)
+        public function sendMail(\Symfony\Component\Mime\Email $email)
         {
             if (!$this->isOutgoingNotificationsEnabled()) {
-                return;
+                return false;
             }
 
-            if ($this->usesEmailQueue())
-            {
+            if ($this->usesEmailQueue()) {
                 MailQueueTable::getTable()->addMailToQueue($email);
                 return true;
             }
-            else
-            {
-                $retval = $this->mail($email);
-            }
-
-            return $retval;
+            return $this->mail($email);
         }
 
         public function temporarilyDisable()
