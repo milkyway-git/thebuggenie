@@ -29,7 +29,6 @@
         "scrivo/highlight.php": "^9.0",
         "ramsey/uuid": "^4.6",
         "erusev/parsedown": "^1.7",
-        "ext-apcu" : "*",
         "ext-gd" : "*",
         "ext-curl" : "*",
         "ext-PDO" : "*",
