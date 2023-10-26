@@ -17,7 +17,7 @@
     ],
     "require" : {
         "php": "^7.4|^8.0",
-        "thebuggenie/b2db" : "^3.0",
+        "milkyway-git/b2db" : "^3.0",
         "symfony/mailer" : "6.3.*",
         "webit/eval-math" : "^1.0",
         "mustangostang/spyc": "0.5.*",
@@ -51,7 +51,7 @@
             "type": "package",
             "package": {
               "name": "milkyway-git/b2db",
-              "version": "master",
+              "version": "3.0.4",
               "source": {
                 "url": "https://github.com/milkyway-git/b2db.git",
                 "type": "git",
