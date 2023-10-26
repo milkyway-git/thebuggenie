@@ -72,9 +72,6 @@
             }
         }
     ],
-    "suggest" : {
-        "ext-apc" : "Enables APC caching of configuration files and table class definitions"
-    },
     "autoload": {
         "psr-0": {
             "Assetic": ["vendor/assetic-php/assetic/src/"]
@@ -87,7 +84,8 @@
             "vendor/assetic-php/assetic/src/functions.php"
             ],
         "classmap": [
-            "vendor/phpunit/phpunit/src/"
+            "vendor/phpunit/phpunit/src/",
+            "vendor/milkyway-git/b2db/"
             ]
     },
     "minimum-stability" : "dev",
