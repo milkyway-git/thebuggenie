@@ -68,7 +68,7 @@
     <?php if ($mode == 'edit'): ?>
         <div id="article_edit_header_information">
             <div id="article_parent_container">
-                <input type="hidden" name="parent_article_name" id="parent_article_name" value="<?= ($article->getParentArticleName()) ? $article->getParentArticleName() : htmlentities($tbg_request['parent_article_name'], ENT_COMPAT, \thebuggenie\core\framework\Context::getI18n()->getCharset()); ?>" style="width: 400px;">
+                <input type="hidden" name="parent_article_name" id="parent_article_name" value="<?= ($article->getParentArticleName()) ? $article->getParentArticleName() : htmlentities($tbg_request['parent_article_name'] === null ? '' : $tbg_request['parent_article_name'], ENT_COMPAT, \thebuggenie\core\framework\Context::getI18n()->getCharset()); ?>" style="width: 400px;">
                 <span class="parent_article_name <?php if (!$article->getParentArticle() instanceof \thebuggenie\modules\publish\entities\Article) echo ' faded_out'; ?>">
                     <span id="parent_article_name_span">
                         <?php if ($article->getParentArticle() instanceof \thebuggenie\modules\publish\entities\Article): ?>
