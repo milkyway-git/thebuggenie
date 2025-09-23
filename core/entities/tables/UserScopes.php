@@ -162,7 +162,7 @@
             $query->where(self::SCOPE, $scope_id);
             $row = $this->rawSelectOne($query);
 
-            $value = ($row) ? (boolean) $row->get(self::CONFIRMED) : false;
+            $value = ($row) ? (bool) $row->get(self::CONFIRMED) : false;
             $this->_scope_confirmed_cache[$scope_id][$user_id] = $value;
 
             return $value;
@@ -175,7 +175,7 @@
             $query->where(self::SCOPE, $scope_id);
             $row = $this->rawSelectOne($query);
 
-            return ($row) ? array('confirmed' => (boolean) $row->get(self::CONFIRMED), 'group_id' => $row->get(self::GROUP_ID)) : null;
+            return ($row) ? array('confirmed' => (bool) $row->get(self::CONFIRMED), 'group_id' => $row->get(self::GROUP_ID)) : null;
         }
 
         public function getScopeDetailsByUser($user_id)
@@ -189,7 +189,7 @@
             {
                 while ($row = $res->getNextRow())
                 {
-                    $scope_details[$row->get(self::SCOPE)] = array('confirmed' => (boolean) $row->get(self::CONFIRMED), 'group_id' => $row->get(self::GROUP_ID), 'internal_id' => $row->get(self::ID));
+                    $scope_details[$row->get(self::SCOPE)] = array('confirmed' => (bool) $row->get(self::CONFIRMED), 'group_id' => $row->get(self::GROUP_ID), 'internal_id' => $row->get(self::ID));
                 }
             }
             if (count($scope_details)) {

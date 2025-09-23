@@ -1316,7 +1316,7 @@
          */
         public function setActivated($val = true)
         {
-            $this->_activated = (boolean) $val;
+            $this->_activated = (bool) $val;
         }
 
         /**

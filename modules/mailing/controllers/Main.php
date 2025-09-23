@@ -125,9 +125,9 @@
                 {
                     $account_id = $request['account_id'];
                     $account = ($account_id) ? new \thebuggenie\modules\mailing\entities\IncomingEmailAccount($account_id) : new \thebuggenie\modules\mailing\entities\IncomingEmailAccount();
-                    $account->setIssuetype((integer) $request['issuetype']);
+                    $account->setIssuetype((int) $request['issuetype']);
                     $account->setProject($project);
-                    $account->setPort((integer) $request['port']);
+                    $account->setPort((int) $request['port']);
                     $account->setName($request['name']);
                     $account->setFoldername($request['folder']);
                     $account->setKeepEmails($request['keepemail']);
@@ -138,7 +138,7 @@
                     $account->setPreferHtml((bool) $request['prefer_html']);
                     $account->setIgnoreCertificateValidation((bool) $request['ignore_certificate_validation']);
                     $account->setUsePlaintextAuthentication((bool) $request['plaintext_authentication']);
-                    $account->setServerType((integer) $request['account_type']);
+                    $account->setServerType((int) $request['account_type']);
                     $account->save();
 
                     if (!$account_id)
