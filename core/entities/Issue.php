@@ -718,7 +718,7 @@
                 {
                     if (!$project instanceof Project) return null;
                     if ($project->usePrefix()) return null;
-                    $found_issue = tables\Issues::getTable()->getByProjectIDAndIssueNo($project->getID(), (integer) $issue_no);
+                    $found_issue = tables\Issues::getTable()->getByProjectIDAndIssueNo($project->getID(), (int) $issue_no);
                 }
                 catch (\Exception $e)
                 {
