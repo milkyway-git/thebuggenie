@@ -2,6 +2,8 @@
 <style>
     #mailnotification_settings_container.mailer-type-<?php echo Mailing::MAIL_TYPE_SMTP; ?> #mail_type_smtp_info { display: block; }
     #mailnotification_settings_container.mailer-type-<?php echo Mailing::MAIL_TYPE_SENDMAIL; ?> #mail_type_sendmail_info { display: block; }
+    #mailnotification_settings_container.mailer-type-<?php echo Mailing::MAIL_TYPE_SMTP_BY_PHPMAILER; ?> #mail_type_smtp_phpmailer_info { display: block; }
+    #mailnotification_settings_container.mailer-type-<?php echo Mailing::MAIL_TYPE_SMTP_BY_SYMFONY; ?> #mail_type_smtp_symfony_info { display: block; }
     #mail_type_smtp_info, #mail_type_sendmail_info { display: none; }
 </style>
 <form accept-charset="<?php echo \thebuggenie\core\framework\Context::getI18n()->getCharset(); ?>" action="<?php echo make_url('configure_module', array('config_module' => $module->getName())); ?>" enctype="multipart/form-data" method="post">
@@ -73,6 +75,8 @@
                         <option value="<?php echo Mailing::MAIL_TYPE_SMTP; ?>" <?php if ($module->getMailerType() == Mailing::MAIL_TYPE_SMTP): ?> selected<?php endif; ?>><?php echo __('SMTP Transport'); ?></option>
                         <option value="<?php echo Mailing::MAIL_TYPE_SENDMAIL; ?>" <?php if ($module->getMailerType() == Mailing::MAIL_TYPE_SENDMAIL): ?> selected<?php endif; ?>><?php echo __('Sendmail Transport'); ?></option>
                         <option value="<?php echo Mailing::MAIL_TYPE_PHP; ?>" <?php if ($module->getMailerType() == Mailing::MAIL_TYPE_PHP): ?> selected<?php endif; ?>><?php echo __('Fallback PHP mail() transport (not recommended)'); ?></option>
+                        <option value="<?php echo Mailing::MAIL_TYPE_SMTP_BY_PHPMAILER; ?>" <?php if ($module->getMailerType() == Mailing::MAIL_TYPE_SMTP_BY_PHPMAILER): ?> selected<?php endif; ?>><?php echo __('SMTP Transport by PHPMailer'); ?></option>
+                        <option value="<?php echo Mailing::MAIL_TYPE_SMTP_BY_SYMFONY; ?>" <?php if ($module->getMailerType() == Mailing::MAIL_TYPE_SMTP_BY_SYMFONY): ?> selected<?php endif; ?>><?php echo __('SMTP Transport by Symfony Mailer'); ?></option>
                     </select>
                 </td>
             </tr>
@@ -140,7 +144,7 @@
             domReady(function () {
                 $('#mailing_mail_type').change(function () {
                     var classname = 'mailer-type-' + $(this).val();
-                    ['mailer-type-<?php echo Mailing::MAIL_TYPE_PHP; ?>', 'mailer-type-<?php echo Mailing::MAIL_TYPE_SMTP; ?>', 'mailer-type-<?php echo Mailing::MAIL_TYPE_SENDMAIL; ?>'].forEach(function (mailertype) {
+                    ['mailer-type-<?php echo Mailing::MAIL_TYPE_SMTP_BY_SYMFONY; ?>', 'mailer-type-<?php echo Mailing::MAIL_TYPE_SMTP_BY_PHPMAILER; ?>', 'mailer-type-<?php echo Mailing::MAIL_TYPE_PHP; ?>', 'mailer-type-<?php echo Mailing::MAIL_TYPE_SMTP; ?>', 'mailer-type-<?php echo Mailing::MAIL_TYPE_SENDMAIL; ?>'].forEach(function (mailertype) {
                         (mailertype == classname) ? $('#mailnotification_settings_container').addClass(mailertype) : $('#mailnotification_settings_container').removeClass(mailertype);
                     });
                 })
