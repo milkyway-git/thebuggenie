@@ -152,7 +152,7 @@ class Pagination
         {
             if ($value !== null && $parameter != 'page' && $parameter != 'page_size')
             {
-                $get_parameters[] = "${parameter}=${value}";
+                $get_parameters[] = "{$parameter}={$value}";
             }
         }
 

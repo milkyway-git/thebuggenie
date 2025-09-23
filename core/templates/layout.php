@@ -18,6 +18,7 @@
         <meta name="author" content="thebuggenie.com">
         <meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=1.0,user-scalable=0"/>
         <meta http-equiv="X-UA-Compatible" content="IE=Edge">
+        <?php require 'chart.php'; ?>
         <title><?= ($tbg_response->hasTitle()) ? strip_tags($header_name . ' ~ ' . $tbg_response->getTitle()) : strip_tags(\thebuggenie\core\framework\Settings::getSiteHeaderName()); ?></title>
         <style>
             @font-face {
@@ -205,9 +206,6 @@
         <?php foreach ($externaljs as $js): ?>
             <script type="text/javascript" src="<?= $js; ?>"></script>
         <?php endforeach; ?>
-          <!--[if lt IE 9]>
-              <script src="http://html5shiv.googlecode.com/svn/trunk/html5.js"></script>
-          <![endif]-->
         <?php \thebuggenie\core\framework\Event::createNew('core', 'layout.php::header-ends')->trigger(); ?>
     </head>
     <body id="body">

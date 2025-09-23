@@ -339,7 +339,8 @@ EOT;
                     $mail = $this->getSymfonyMail(html_entity_decode($translated_subject, ENT_NOQUOTES, $i18n->getCharset()), $body_parts[0], $body_parts[1]);
                     foreach ($users as $user)
                     {
-                        $mail->to(array($user->getEmail() => $user->getName()));
+                        $address = new \Symfony\Component\Mime\Address($user->getEmail(), $user->getName());
+                        $mail->to($address);
                     }
                     $messages[] = $mail;
                     framework\Context::getI18n()->setLanguage($current_language);
@@ -413,8 +414,8 @@ EOT;
                 return;
             }
 
-//                The following line is included for the i18n parser to pick up the translatable string:
-//                __('Password reset');
+//          The following line is included for the i18n parser to pick up the translatable string:
+//          __('Password reset');
             $subject = 'Password reset';
             $user = $event->getSubject();
             $parameters = array('user' => $user, 'password' => $event->getParameter('password'));
@@ -432,8 +433,8 @@ EOT;
                 return;
             }
 
-//                The following line is included for the i18n parser to pick up the translatable string:
-//                __('Forgot your password?');
+//          The following line is included for the i18n parser to pick up the translatable string:
+//          __('Forgot your password?');
             $subject = 'Forgot your password?';
             $parameters = compact('user');
             $messages = $this->getTranslatedMessages('forgottenpassword', $parameters, array($user), $subject);
@@ -1005,20 +1006,14 @@ EOT;
         public function sendMail(\Symfony\Component\Mime\Email $email)
         {
             if (!$this->isOutgoingNotificationsEnabled()) {
-                return;
+                return false;
             }
 
-            if ($this->usesEmailQueue())
-            {
+            if ($this->usesEmailQueue()) {
                 MailQueueTable::getTable()->addMailToQueue($email);
                 return true;
             }
-            else
-            {
-                $retval = $this->mail($email);
-            }
-
-            return $retval;
+            return $this->mail($email);
         }
 
         public function temporarilyDisable()

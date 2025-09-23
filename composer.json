@@ -17,20 +17,18 @@
     ],
     "require" : {
         "php": "^7.4|^8.0",
-        "thebuggenie/b2db" : "^3.0",
+        "milkyway-git/b2db" : "^3.0",
         "symfony/mailer" : "6.3.*",
         "webit/eval-math" : "^1.0",
         "mustangostang/spyc": "0.5.*",
-        "realityking/pchart": "dev-master",
         "phpoffice/phpspreadsheet": "^1.17.0",
-        "kriswallsmith/assetic": "~1.2",
+        "assetic-php/assetic": "^3.0",
         "lib-pcre" : ">=8.0",
         "net/http" : "^1.1",
         "guzzlehttp/guzzle": "^6.3",
         "scrivo/highlight.php": "^9.0",
         "ramsey/uuid": "^4.6",
         "erusev/parsedown": "^1.7",
-        "ext-apcu" : "*",
         "ext-gd" : "*",
         "ext-curl" : "*",
         "ext-PDO" : "*",
@@ -41,23 +39,54 @@
         "ext-xml" : "*",
         "ext-Reflection" : "*",
         "ext-zip" : "*",
-        "easybook/geshi": "v1.0.8.19",
+        "easybook/geshi": "^1.0.8.19",
         "league/html-to-markdown": "^4.8"
     },
     "require-dev" : {
-        "symfony/finder" : "~2.7",
-        "phpunit/phpunit": "4.*",
-        "phpunit/phpunit-skeleton-generator": "*"
+        "symfony/finder" : "~6.2",
+        "phpunit/phpunit": "~9"
     },
-    "suggest" : {
-        "ext-apc" : "Enables APC caching of configuration files and table class definitions"
-    },
-
+    "repositories" : [
+        {
+            "type": "package",
+            "package": {
+              "name": "milkyway-git/b2db",
+              "version": "3.0.4",
+              "source": {
+                "url": "https://github.com/milkyway-git/b2db.git",
+                "type": "git",
+                "reference": "master"
+              }
+            }
+        },
+        {
+            "type": "package",
+            "package": {
+              "name": "assetic-php/assetic",
+              "version": "3.0.2",
+              "source": {
+                "url": "https://github.com/assetic-php/assetic.git",
+                "type": "git",
+                "reference": "master"
+              }
+            }
+        }
+    ],
     "autoload": {
-        "psr-4" : {
+        "psr-0": {
+            "Assetic": ["vendor/assetic-php/assetic/src/"]
+        },
+        "psr-4": {
             "thebuggenie\\modules\\" : "modules/",
             "thebuggenie\\core\\" : "core/"
-        }
+        },
+        "files": [
+            "vendor/assetic-php/assetic/src/functions.php"
+            ],
+        "classmap": [
+            "vendor/phpunit/phpunit/src/",
+            "vendor/milkyway-git/b2db/"
+            ]
     },
     "minimum-stability" : "dev",
     "prefer-stable" : true,

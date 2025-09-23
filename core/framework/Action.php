@@ -128,9 +128,17 @@
             if (is_array($text) && array_key_exists('error', $text)) $this->getResponse()->setHttpStatus(Response::HTTP_STATUS_BAD_REQUEST);
 
             if (is_array($text))
-                array_walk_recursive($text , function(&$item) { $item = iconv('UTF-8', 'UTF-8//IGNORE', $item); });
+            {
+                array_walk_recursive($text , function(&$item) { $item = iconv('UTF-8', 'UTF-8//IGNORE', $item === null ? '' : $item); });
+            }
+            else if ($text === null)
+            {
+              $text = '';
+            }
             else
+            {
                 $text = iconv('UTF-8', 'UTF-8//IGNORE', $text);
+            }
 
             echo json_encode($text);
             return true;

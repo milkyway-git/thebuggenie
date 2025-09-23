@@ -51,6 +51,13 @@
         protected $toc = array();
         protected $text = null;
 
+        private   $list_level_types = null;
+        private   $list_level = 0;
+        private   $deflist = false;
+        private   $stop = false;
+        private   $stop_all = false;
+        private   $namespace = null;
+
         /**
          * Add a regex to be parsed, with a function callback
          *
@@ -144,6 +151,9 @@
          */
         public function __construct($text, $use_toc = false, $toc_base_id = null)
         {
+            if ($text === null) {
+              $text = '';
+            }
             $this->text = str_replace("\r\n", "\n", $text);
             $this->use_toc = $use_toc;
             $this->toc_base_id = $toc_base_id;

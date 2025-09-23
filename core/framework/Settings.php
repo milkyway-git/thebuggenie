@@ -633,11 +633,17 @@
 
         public static function getRegistrationDomainWhitelist()
         {
+            if (self::get(self::SETTING_REGISTRATION_DOMAIN_WHITELIST) === null) {
+              return '';
+            }
             return trim(self::get(self::SETTING_REGISTRATION_DOMAIN_WHITELIST));
         }
 
         public static function hasRegistrationDomainWhitelist()
         {
+            if (self::get(self::SETTING_REGISTRATION_DOMAIN_WHITELIST) === null) {
+              return false;
+            }
             return (trim(self::get(self::SETTING_REGISTRATION_DOMAIN_WHITELIST)) !== '');
         }
 
