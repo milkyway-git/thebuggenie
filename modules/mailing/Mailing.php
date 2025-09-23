@@ -429,7 +429,7 @@ EOT;
                         {
                             try
                             {
-                                $mail->send();
+                                $this->sendMail($message);
                             } 
                             catch (\PHPMailer\PHPMailer\Exception $e) 
                             {
