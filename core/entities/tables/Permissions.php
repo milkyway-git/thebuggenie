@@ -413,7 +413,7 @@
                     }
                     if ($target instanceof \thebuggenie\core\entities\common\Identifiable)
                     {
-                        $permissions[] = array('target' => $target, 'allowed' => (boolean) $row->get(self::ALLOWED), 'user_id' => $row->get(self::UID), 'team_id' => $row->get(self::TID), 'group_id' => $row->get(self::GID));
+                        $permissions[] = array('target' => $target, 'allowed' => (bool) $row->get(self::ALLOWED), 'user_id' => $row->get(self::UID), 'team_id' => $row->get(self::TID), 'group_id' => $row->get(self::GID));
                     }
                 }
             }
