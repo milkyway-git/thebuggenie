@@ -24,10 +24,12 @@
     class Mailing extends \thebuggenie\core\entities\Module
     {
 
-        const VERSION = '2.0.1';
+        const VERSION = '2.0.2';
         const MAIL_TYPE_PHP = 1;
         const MAIL_TYPE_SMTP = 2;
         const MAIL_TYPE_SENDMAIL = 3;
+        const MAIL_TYPE_SMTP_BY_PHPMAILER = 4;
+        const MAIL_TYPE_SMTP_BY_SYMFONY = 5;
 
         /**
          * Notify the user when a new issue is posted in his/her project(s)
@@ -169,9 +171,12 @@
                     switch ($setting)
                     {
                         case 'smtp_host':
-                            if ($request['mail_type'] == self::MAIL_TYPE_SMTP && !tbg_check_syntax($value, "MAILSERVER"))
+                            if ($this->isSMTP($request['mail_type']) && !tbg_check_syntax($value, "MAILSERVER"))
                             {
-                                throw new \Exception(framework\Context::getI18n()->__('Please provide a valid setting for SMTP server address'));
+                                if ($value !== 'localhost')
+                                {
+                                    throw new \Exception(framework\Context::getI18n()->__('Please provide a valid setting for SMTP server address'));
+                                }
                             }
                             break;
                         case 'from_addr':
@@ -181,13 +186,13 @@
                             }
                             break;
                         case 'timeout':
-                            if ($request['mail_type'] == self::MAIL_TYPE_SMTP && !is_numeric($value) || $value < 0)
+                            if ($this->isSMTP($request['mail_type']) && !is_numeric($value) || $value < 0)
                             {
                                 throw new \Exception(framework\Context::getI18n()->__('Please provide a valid setting for SMTP server timeout'));
                             }
                             break;
                         case 'smtp_port':
-                            if ($request['mail_type'] == self::MAIL_TYPE_SMTP && !is_numeric($value) || $value < 1)
+                            if ($this->isSMTP($request['mail_type']) && !is_numeric($value) || $value < 1)
                             {
                                 throw new \Exception(framework\Context::getI18n()->__('Please provide a valid setting for SMTP server port'));
                             }
@@ -297,6 +302,32 @@ EOT;
             return $email;
         }
 
+        public function getPHPMailerMail($subject, $message_plain, $message_html)
+        {
+          $mail = new \PHPMailer\PHPMailer\PHPMailer(true);
+          $mail->isSMTP();
+          if ($this->getSmtpHost() != '' && $this->getSmtpHost() != 'localhost')
+          {
+              $mail->Host = $this->getSmtpHost();
+          }
+          else
+          {
+              $mail->Host = 'localhost';
+              $mail->SMTPOptions = [ 'ssl' => [ 'verify_peer' => false, 'verify_peer_name' => false, 'allow_self_signed' => true ] ];
+          }
+          $mail->Username   = $this->getSmtpUsername();
+          $mail->Password   = $this->getSmtpPassword();
+          $mail->SMTPSecure = 'ssl';
+          $mail->Port = $this->getSmtpPort();
+          $mail->SetFrom($this->getEmailFromAddress(), $this->getEmailFromName());
+          $mail->isHTML(true);
+          $mail->Subject = $subject;
+          $mail->Body    = $message_html;
+          $mail->AltBody = $message_plain;
+          return $mail;
+        }
+
+
         public function getUsersAndLanguages($users)
         {
             $langs = array();
@@ -336,11 +367,25 @@ EOT;
                     $i18n->setLanguage($language);
                     $body_parts = $this->getEmailTemplates($template, $parameters);
                     $translated_subject = $i18n->__($subject, $subject_parameters);
-                    $mail = $this->getSymfonyMail(html_entity_decode($translated_subject, ENT_NOQUOTES, $i18n->getCharset()), $body_parts[0], $body_parts[1]);
+                    if ($this->getMailerType() == self::MAIL_TYPE_SMTP_BY_PHPMAILER)
+                    {
+                        $mail = $this->getPHPMailerMail(html_entity_decode($translated_subject, ENT_NOQUOTES, $i18n->getCharset()), $body_parts[0], $body_parts[1]);
+                    }
+                    else
+                    {
+                        $mail = $this->getSymfonyMail(html_entity_decode($translated_subject, ENT_NOQUOTES, $i18n->getCharset()), $body_parts[0], $body_parts[1]);
+                    }
                     foreach ($users as $user)
                     {
-                        $address = new \Symfony\Component\Mime\Address($user->getEmail(), $user->getName());
-                        $mail->to($address);
+                        if ($this->getMailerType() == self::MAIL_TYPE_SMTP_BY_PHPMAILER)
+                        {
+                            $mail->addAddress($user->getEmail(), $user->getName());
+                        }
+                        else
+                        {
+                            $address = new \Symfony\Component\Mime\Address($user->getEmail(), $user->getName());
+                            $mail->to($address);
+                        }
                     }
                     $messages[] = $mail;
                     framework\Context::getI18n()->setLanguage($current_language);
@@ -380,7 +425,20 @@ EOT;
 
                     foreach ($messages as $message)
                     {
-                        $this->sendMail($message);
+                        if ($this->getMailerType() == self::MAIL_TYPE_SMTP_BY_PHPMAILER) 
+                        {
+                            try
+                            {
+                                $this->sendMail($message);
+                            } 
+                            catch (\PHPMailer\PHPMailer\Exception $e) 
+                            {
+                            }
+                        }
+                        else
+                        {
+                            $this->sendMail($message);
+                        }
                     }
                 }
                 $event->setProcessed();
@@ -453,6 +511,19 @@ EOT;
 
             $subject = framework\Context::getI18n()->__('Test email');
             $body_parts = $this->getEmailTemplates('testemail');
+            if ($this->getMailerType() == self::MAIL_TYPE_SMTP_BY_PHPMAILER) {
+                try
+                {
+                    $mail = $this->getPHPMailerMail($subject, $body_parts[0], $body_parts[1]);
+                    $mail->addAddress($email_address, $email_address);
+                    $mail->send();
+                    return true;
+                } 
+                catch (\PHPMailer\PHPMailer\Exception $e)
+                {
+                  return false;
+                }
+            }
             $message = $this->getSymfonyMail($subject, $body_parts[0], $body_parts[1]);
             $message->to($email_address);
             return $this->sendMail($message);
@@ -522,7 +593,24 @@ EOT;
             return $users;
         }
 
-        protected function _addProjectEmailAddress(\Symfony\Component\Mime\Email $message, Project $project = null)
+
+        protected function _addProjectEmailAddress($message, Project $project = null)
+        {
+            if ($project instanceof Project)
+            {
+                if ($this->getMailerType() == self::MAIL_TYPE_SMTP_BY_PHPMAILER)
+                {
+                    $this->_addProjectEmailAddressPHPMailer($message, $project);
+                }
+                else
+                {
+                    $this->_addProjectEmailAddressSymfony($message, $project);
+                }
+            }
+        }
+
+
+        protected function _addProjectEmailAddressSymfony(\Symfony\Component\Mime\Email $message, Project $project = null)
         {
             if ($project instanceof Project)
             {
@@ -532,6 +620,20 @@ EOT;
                 {
                     $mailaddress = new \Symfony\Component\Mime\Address($address, $name);
                     $message->from($mailaddress);
+                }
+            }
+        }
+
+
+        protected function _addProjectEmailAddressPHPMailer(\PHPMailer\PHPMailer\PHPMailer $message, Project $project = null)
+        {
+            if ($project instanceof Project)
+            {
+                $address = $this->getSetting(self::SETTING_PROJECT_FROM_ADDRESS . $project->getID());
+                $name = $this->getSetting(self::SETTING_PROJECT_FROM_NAME . $project->getID());
+                if ($address != '')
+                {
+                    $message->SetFrom($address, $name);
                 }
             }
         }
@@ -951,7 +1053,7 @@ EOT;
         {
             if ($this->mailer === null)
             {
-                if ($this->getMailerType() == self::MAIL_TYPE_SMTP) {
+                if ($this->isSMTP($this->getMailerType())) {
                     $dsn = 'smtp://';
                     if ($this->getSmtpUsername() != '')
                     {
@@ -1003,7 +1105,20 @@ EOT;
             return $mailer->send($message);
         }
 
-        public function sendMail(\Symfony\Component\Mime\Email $email)
+        public function sendMail($email)
+        {
+            if ($this->getMailerType() == self::MAIL_TYPE_SMTP_BY_PHPMAILER)
+            {
+                return $this->sendMailPHPMailer($email);
+            }
+            else
+            {
+                return $this->sendMailSymfony($email);
+            }
+        }
+
+
+        public function sendMailSymfony(\Symfony\Component\Mime\Email $email)
         {
             if (!$this->isOutgoingNotificationsEnabled()) {
                 return false;
@@ -1015,6 +1130,24 @@ EOT;
             }
             return $this->mail($email);
         }
+
+        public function sendMailPHPMailer(\PHPMailer\PHPMailer\PHPMailer $email)
+        {
+            if (!$this->isOutgoingNotificationsEnabled()) {
+                return false;
+            }
+            if ($this->usesEmailQueue()) {
+                // queues not yet supported for PHPMailer
+                return false;
+            }
+            try {
+                $email->send();
+            } catch (Exception $e) {
+                throw new \Exception(framework\Context::getI18n()->__('Message could not be sent. PHPMailer error: ') . $email->ErrorInfo);
+            }
+            return true;
+        }
+
 
         public function temporarilyDisable()
         {
@@ -1409,6 +1542,11 @@ EOT;
         public function getFontAwesomeColor()
         {
             return '#555';
+        }
+
+        private function isSMTP(int $mailtype)
+        {
+            return $mailtype == self::MAIL_TYPE_SMTP || $mailtype == self::MAIL_TYPE_SMTP_BY_PHPMAILER || $mailtype == self::MAIL_TYPE_SMTP_BY_SYMFONY;
         }
 
     }

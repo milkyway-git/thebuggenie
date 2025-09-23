@@ -19,6 +19,7 @@
         "php": "^7.4|^8.0",
         "milkyway-git/b2db" : "^3.0",
         "symfony/mailer" : "6.3.*",
+        "phpmailer/phpmailer": "^6.10",
         "webit/eval-math" : "^1.0",
         "mustangostang/spyc": "0.5.*",
         "phpoffice/phpspreadsheet": "^1.17.0",
