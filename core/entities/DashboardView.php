@@ -282,7 +282,7 @@
 
         public function shouldBePreloaded()
         {
-            return (boolean) in_array($this->getType(), array(self::VIEW_FRIENDS,
+            return (bool) in_array($this->getType(), array(self::VIEW_FRIENDS,
                         self::VIEW_PROJECT_DOWNLOADS,
                         self::VIEW_PROJECT_INFO,
                         self::VIEW_PROJECT_UPCOMING));
