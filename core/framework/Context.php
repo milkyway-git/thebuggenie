@@ -504,7 +504,7 @@ class Context
 
             // The time the script was loaded
             $starttime = explode(' ', microtime());
-            define('NOW', (integer) $starttime[1]);
+            define('NOW', (int) $starttime[1]);
 
             // Set the start time
             self::setLoadStart($starttime[1] + $starttime[0]);
